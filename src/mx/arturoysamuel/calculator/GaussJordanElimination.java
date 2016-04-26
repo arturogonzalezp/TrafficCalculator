@@ -1,5 +1,4 @@
 package mx.arturoysamuel.calculator;
-
 public class GaussJordanElimination {
     private static final double EPSILON = 1e-8;
 
@@ -26,8 +25,7 @@ public class GaussJordanElimination {
 
     private void solve() {
         for (int p = 0; p < N; p++) {
-        	
-            show();
+            //showSingleMatrix();
             int max = p;
             for (int i = p+1; i < N; i++) {
                 if (Math.abs(a[i][p]) > Math.abs(a[max][p])) {
@@ -35,24 +33,35 @@ public class GaussJordanElimination {
                 }
             }
             swap(p, max);
-            if (Math.abs(a[p][p]) <= EPSILON) {
-                continue;
-                // throw new RuntimeException("Matrix is singular or nearly singular");
+            int q = p;
+            if (Math.abs(a[p][q]) <= EPSILON) {
+            	for (int i = p; i < a[p].length; i++) {
+            		if (Math.abs(a[p][i]) > EPSILON){
+            			q = i;
+            			break;
+            		}
+				}
+            	if (Math.abs(a[p][q]) <= EPSILON){
+            		continue;
+                	//throw new RuntimeException("Matrix is singular or nearly singular");
+            	}
             }
-            pivot(p, p);
+            pivot(p, q);
         }
-        show();
+        //show();
     }
     private void swap(int row1, int row2) {
         double[] temp = a[row1];
         a[row1] = a[row2];
         a[row2] = temp;
     }
-    private void pivot(int p, int q) {
+    private void pivot(int p, int q) {  	
         for (int i = 0; i < N; i++) {
             double alpha = a[i][q] / a[p][q];
             for (int j = 0; j <= N+N; j++) {
-                if (i != p && j != q) a[i][j] -= alpha * a[p][j];
+                if (i != p && j != q){
+                	a[i][j] -= alpha * a[p][j];
+                }
             }
         }
         for (int i = 0; i < N; i++){
@@ -70,12 +79,20 @@ public class GaussJordanElimination {
     public double[] primal() {
         double[] x = new double[N];
         for (int i = 0; i < N; i++) {
+        	//System.err.println("a[" + i + "][" + i + "]: " + a[i][i] + " | a[" + i + "][" + (N + N) + "]" + a[i][N+N]);
             if (Math.abs(a[i][i]) > EPSILON){
                 x[i] = a[i][N+N] / a[i][i];
             }else if (Math.abs(a[i][N+N]) > EPSILON){
                 return null;
             }
         }
+        return x;
+    }
+    public double[] result(){
+    	double[] x = new double[N];
+        for (int i = 0; i < N; i++) {
+			x[i] = a[i][N+N];
+		}
         return x;
     }
     public double[] dual() {
@@ -96,13 +113,23 @@ public class GaussJordanElimination {
     public void show() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                System.out.printf("%8.3f ", a[i][j]);
+                System.out.printf("%4.1f ", a[i][j]);
             }
             System.out.printf("| ");
             for (int j = N; j < N+N; j++) {
-                System.out.printf("%8.3f ", a[i][j]);
+                System.out.printf("%4.1f ", a[i][j]);
             }
-            System.out.printf("| %8.3f\n", a[i][N+N]);
+            System.out.printf("| %4.1f\n", a[i][N+N]);
+        }
+        System.out.println();
+    }
+    public void showSingleMatrix(){
+    	for (int i = 0; i < N; i++) {
+            System.out.printf("%2.0f |", a[i][N+N+1]);
+            for (int j = 0; j < N; j++) {
+                System.out.printf("%4.1f ", a[i][j]);
+            }
+            System.out.printf("| %4.1f\n", a[i][N+N]);
         }
         System.out.println();
     }
