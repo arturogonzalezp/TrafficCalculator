@@ -3,18 +3,24 @@ package mx.arturoysamuel.graphics;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.print.attribute.standard.NumberOfDocuments;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import mx.arturoysamuel.calculator.DependentVariable;
+import mx.arturoysamuel.calculator.FinalEcuation;
+import mx.arturoysamuel.calculator.GaussJordanElimination;
+
 public class TrafficFrame extends JFrame implements ActionListener{
 	private TrafficPanel panelTraffic;
 	private InputVariablesPanel panelInputVariables;
 	private DependentVariablesPanel panelDependentVariables;
 	private final int maxNumberOfStreets = 10;
-	private final int minNumberOfStreets = 3;
+	private final int minNumberOfStreets = 4;
 	private int streetsCount;
 	private int numOfVariables;
 	private int numOfNodes;
@@ -34,7 +40,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 		
 		this.setNumOfVariables(1);
 		this.setNumOfNodes(2);
-		for (int i = this.getMinNumberOfStreets(), countUpToTwo = 0, sumVar = 3, sumNode = 2; this.getStreetsCount() > i; i++) {
+		for (int i = this.getMinNumberOfStreets(), countUpToTwo = 0, sumVar = 3, sumNode = 2; this.getStreetsCount() >= i; i++) {
 			if(countUpToTwo == 2){
 				countUpToTwo = 0;
 				sumVar += 2;
@@ -182,14 +188,245 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				}
 			}
 			if(inputIsValid){
+				int[] inputValues = new int[textFields.length];
+				for (int i = 0; i < inputValues.length; i++) {
+					inputValues[i] = Integer.parseInt(textFields[i].getText());
+				}
 				double[][] A = new double[this.getNumOfVariables()][this.getNumOfVariables()];
 				double[] b = new double[this.getNumOfVariables()];
-				
-				/*for (int i = 0; i < b.length; i++) {
-					
+				for (int i = 0; i < this.getNumOfVariables(); i++) {
+					for (int j = 0; j < this.getNumOfVariables(); j++) {
+						A[i][j] = 0;
+					}
+					b[i] = 0;
 				}
 				
-				for (int i = 0; i < this.getNumOfVariables(); i++) {
+				for (int nodeNum = 0, row = 0, column = 0; nodeNum < this.getNumOfNodes(); nodeNum++) {
+					if(row == 0 && column == 0){
+						// Esquina izquierda superior
+						int eastNodePos = 0;
+						int southNodePost = eastNodePos + (this.getDirectionsV().length - 1);
+						
+						if(this.getDirectionsV()[column]){
+							
+							if(this.getDirectionsH()[row]){
+								
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][southNodePost] = 1;
+								b[nodeNum] = inputValues[0] + inputValues[inputValues.length-1];
+								
+							}else{
+
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][southNodePost] = -1;
+								b[nodeNum] = -inputValues[0] + inputValues[inputValues.length-1];
+								
+							}
+						}else{
+							if(this.getDirectionsH()[row]){
+
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][southNodePost] = -1;
+								b[nodeNum] = -inputValues[0] + inputValues[inputValues.length-1];
+								
+							}else{
+
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][southNodePost] = 1;
+								b[nodeNum] = inputValues[0] + inputValues[inputValues.length-1];
+								
+							}
+						}
+						
+					}else if(row == (this.getDirectionsH().length - 1) && column == 0){
+						// Esquina izquierda inferior FALTAN las A!!!!!!
+						int eastNodePos = (this.getNumOfVariables()-1) - (this.getDirectionsV().length - 2);
+						int northNodePost = eastNodePos - this.getDirectionsV().length;
+						
+						if(this.getDirectionsV()[column]){
+						
+							if(this.getDirectionsH()[row]){
+								
+								A[nodeNum][eastNodePos] = -1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = -inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length] + inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length - 1];
+							}else{
+
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length] + inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length - 1];
+							}
+							
+						}else{
+							
+							if(this.getDirectionsH()[row]){
+								
+								A[nodeNum][eastNodePos] = 1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length] + inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length - 1];
+							}else{
+
+								A[nodeNum][eastNodePos] = -1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = -inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length] + inputValues[(2*this.getDirectionsV().length) + this.getDirectionsH().length - 1];
+							}
+						}
+						
+					}else if(row == 0 && column == (this.getDirectionsV().length - 1)){
+						// Esquina derecha superior
+						int westNodePos = this.getDirectionsV().length - 2;
+						int southNodePos = westNodePos+this.getDirectionsV().length;
+						
+						if(this.getDirectionsV()[column]){
+	
+							if(this.getDirectionsH()[row]){
+								
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][southNodePos] = -1;
+								b[nodeNum] = -inputValues[column] + inputValues[this.getDirectionsV().length];
+								
+							}else{
+
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][southNodePos] = 1;
+								b[nodeNum] = inputValues[column] + inputValues[this.getDirectionsV().length];
+								
+							}
+						}else{
+							if(this.getDirectionsH()[row]){
+
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][southNodePos] = 1;
+								b[nodeNum] = inputValues[column] + inputValues[this.getDirectionsV().length];
+								
+							}else{
+
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][southNodePos] = -1;
+								b[nodeNum] = -inputValues[column] + inputValues[this.getDirectionsV().length];
+								
+							}
+						}
+						
+					}else if(row == (this.getDirectionsH().length - 1) && column == (this.getDirectionsV().length - 1)){
+						// Esquina derecha inferior
+						int westNodePos = this.getNumOfVariables()-1;
+						int northNodePost = westNodePos - (this.getDirectionsV().length - 1);
+						
+						if(this.getDirectionsV()[column]){
+							
+							if(this.getDirectionsH()[row]){
+								
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[this.getDirectionsV().length + this.getDirectionsH().length] + inputValues[this.getDirectionsV().length + this.getDirectionsH().length -1];
+								
+							}else{
+
+								A[nodeNum][westNodePos] = -1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[this.getDirectionsV().length + this.getDirectionsH().length] - inputValues[this.getDirectionsV().length + this.getDirectionsH().length -1];
+								
+							}
+						}else{
+							
+							if(this.getDirectionsH()[row]){
+
+								A[nodeNum][westNodePos] = -1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[this.getDirectionsV().length + this.getDirectionsH().length] - inputValues[this.getDirectionsV().length + this.getDirectionsH().length -1];
+								
+							}else{ 
+
+								A[nodeNum][westNodePos] = 1;
+								A[nodeNum][northNodePost] = 1;
+								b[nodeNum] = inputValues[this.getDirectionsV().length + this.getDirectionsH().length] + inputValues[this.getDirectionsV().length + this.getDirectionsH().length -1];
+								
+							}
+						}
+					}else{
+						if(row == 0){
+							// Fila superior (no incluye a las esquinas)
+						}else if(row == (this.getNumOfVariables() - 1)){
+							// Fila inferior (no incluye a las esquinas)
+						} if(column == 0){
+							// Lado izquierdo (no incluye a las esquinas)
+						}else if(column == (this.getNumOfVariables() - 1)){
+							// Lado derecho (no incluye a las esquinas
+						}else{
+							// Nodos Internos
+						}
+					}
+					if((column + 1) % (this.getDirectionsV().length) == 0){
+						row++;
+						column = 0;
+						continue;
+					}
+					column++;
+				}
+				
+				for (int i = 0; i < A.length; i++) {
+					for (int j = 0; j < A[i].length; j++) {
+						System.out.printf("%4.0f ",A[i][j]);
+					}
+					System.out.println(" | " + b[i]);
+				}
+				GaussJordanElimination gj = new GaussJordanElimination(A, b);
+				List<Integer> dependentVariablesIndex = gj.getDependentVariables();
+				List<DependentVariable> dependentVariables = new ArrayList<DependentVariable>();
+				double[] results = gj.getResults();
+				double[][] solvedSingleMatrix = gj.getSolvedSingleMatrix();
+				double[][] originalMatrix = gj.getOriginalMatrix();
+				int N = gj.getN();
+				FinalEcuation[] finalEcuations = new FinalEcuation[N];
+				
+				System.out.println("Original Matrix: ");
+				for (int i = 0; i < originalMatrix.length; i++) {
+					for (int j = 0; j < originalMatrix[i].length; j++) {
+						System.out.printf("%4.0f ",originalMatrix[i][j]);
+					}
+					System.out.println();
+				}
+				
+				System.out.println("\nSolved Single Matrix: ");
+				for (int i = 0; i < solvedSingleMatrix.length; i++) {
+					for (int j = 0; j < solvedSingleMatrix[i].length; j++) {
+						System.out.printf("%4.0f ",solvedSingleMatrix[i][j]);
+					}
+					System.out.println();
+				}
+				
+				System.out.println("\nDependent Variables: ");
+				for (Integer dependentVariableIndex : dependentVariablesIndex) {
+					System.out.println("X" + (dependentVariableIndex + 1) + " = " + "X" + (dependentVariableIndex + 1));
+				}
+						
+				System.out.println("\nMatrix Results: ");
+				for (int i = 0; i < results.length; i++) {
+					System.out.println("X" + (i + 1) + " = " + results[i]);
+					finalEcuations[i] = new FinalEcuation((int) results[i]);
+				}
+
+				for (int i = 0; i < N; i++) {
+					if(dependentVariablesIndex.indexOf(i) == -1){
+						for (int j = i+1; j < solvedSingleMatrix[i].length; j++) {
+							if(solvedSingleMatrix[i][j] != 0){
+								finalEcuations[i].addXValue((int) -solvedSingleMatrix[i][j],j);
+							}
+						}
+					}else{
+						finalEcuations[i].addXValue(1,i);
+					}
+				}
+				
+				System.out.println("\nResult Ecuations: ");
+				for (int i = 0; i < finalEcuations.length; i++) {
+					System.out.println("X" + (i + 1) + " = " + finalEcuations[i]);
+				}
+				
+				System.out.println("Almost end...");
+				
+				/*for (int i = 0; i < this.getNumOfVariables(); i++) {
 					for (int j = 0; j < this.getNumOfVariables(); j++) {
 						// For para recorrer la matriz con los valores
 					}
@@ -218,7 +455,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				 */
 			}
 		}else{
-			
+			// Otro evento 
 		}
 	}
 }
