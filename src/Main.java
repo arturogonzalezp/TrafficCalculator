@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import mx.arturoysamuel.calculator.DependentVariable;
 import mx.arturoysamuel.calculator.FinalEcuation;
 import mx.arturoysamuel.calculator.GaussJordanElimination;
@@ -11,16 +8,16 @@ import mx.arturoysamuel.graphics.TrafficFrame;
 
 
 public class Main {
-
 	public static void main(String[] args) {
-		//TrafficFrame frmTraffic = new TrafficFrame();
-		double[][] A = {
+		TrafficFrame frmTraffic = new TrafficFrame();
+		
+		/*double[][] A = {
 				{-1, 0, 0, 1},
 				{1, -1, 0, 0},
 				{0, 0, -1, 1},
 				{0, 1, -1, 0},
 		};
-		double[] b = { 100, 300, 500, 100};
+		double[] b = { 100, 300, 500, 100};*/
 		/*double[][] A = {
 				{1, 0, 1, 0, 0, 0, 0},
 				{1, -1, 0, 1, 0, 0, 0},
@@ -68,7 +65,7 @@ public class Main {
 	        };
 		double[] b = {800,200,100,700,400,0,0,250,150,700,800,500,0,0,0,0,0};*/
 		
-		GaussJordanElimination gj = new GaussJordanElimination(A, b);
+		/*GaussJordanElimination gj = new GaussJordanElimination(A, b);
 		List<Integer> dependentVariablesIndex = gj.getDependentVariables();
 		List<DependentVariable> dependentVariables = new ArrayList<DependentVariable>();
 		double[] results = gj.getResults();
@@ -142,8 +139,7 @@ public class Main {
 				System.out.print(" <-ERROR, no puede ser negativo el tráfico...");
 			}
 			System.out.println();
-		}
-		
+		}*/
 		System.out.println("\nFinal...");
 	}
 

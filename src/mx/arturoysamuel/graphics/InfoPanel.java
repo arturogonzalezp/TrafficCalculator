@@ -1,24 +1,35 @@
 package mx.arturoysamuel.graphics;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class InfoPanel extends JPanel {
-	
-	GridLayout gLayout;
-	private JLabel[] lbInfo;
-	
-	public InfoPanel(int numOfInputs) {
-		this.gLayout = new GridLayout(12, 1);
-		this.setLayout(this.gLayout);
-		this.lbInfo = new JLabel[numOfInputs];
-		for (int i = 0; i < this.lbInfo.length; i++) {
-			this.lbInfo[i] = new JLabel(Character.toString((char) (65 + i)));
-			this.add(this.lbInfo[i]);
+	private GridLayout gridLayout;
+	private JLabel[] labelInfo;
+	public InfoPanel(int numOfStreets) {
+		int numOfInputs = numOfStreets*2;
+		this.setGridLayout(new GridLayout(numOfInputs, 1));
+		this.setLayout(this.getGridLayout());
+		this.setPreferredSize(new Dimension(50, 400));
+		this.setLabelInfo(new JLabel[numOfInputs]);
+		for (int i = 0; i < this.getLabelInfo().length; i++) {
+			this.getLabelInfo()[i] = new JLabel(Character.toString((char) (65 + i)),SwingConstants.CENTER);
+			this.add(this.getLabelInfo()[i]);
 		}
-		this.setPreferredSize(new Dimension(20, 400));
+	}
+	public GridLayout getGridLayout() {
+		return gridLayout;
+	}
+	public void setGridLayout(GridLayout gridLayout) {
+		this.gridLayout = gridLayout;
+	}
+	public JLabel[] getLabelInfo() {
+		return labelInfo;
+	}
+	public void setLabelInfo(JLabel[] labelInfo) {
+		this.labelInfo = labelInfo;
 	}
 }

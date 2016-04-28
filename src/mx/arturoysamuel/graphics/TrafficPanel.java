@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class TrafficPanel extends JPanel {
 
-	int numOfInputs;
+	int streetsCount;
 	RoadLine[] roadLine;
 
 	private static final int X_INIT = 50;
@@ -18,8 +18,8 @@ public class TrafficPanel extends JPanel {
 	private static final int Y_INIT = 50;
 	private static final int Y_LAST = 450;
 
-	public TrafficPanel(int numOfInputs) {
-		this.numOfInputs = numOfInputs;
+	public TrafficPanel(int streetsCount) {
+		this.streetsCount = streetsCount;
 		this.setPreferredSize(new Dimension(500, 500));
 		this.setBorder(BorderFactory.createTitledBorder("Traffic Calculator"));
 	}
@@ -27,25 +27,25 @@ public class TrafficPanel extends JPanel {
 	public void paintLines(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
-		this.roadLine = new RoadLine[this.numOfInputs];
+		this.roadLine = new RoadLine[this.streetsCount];
 		
 		int xDiv;
-		if (this.numOfInputs % 2 == 0) {
-			xDiv = (int) Math.ceil((this.numOfInputs / 2)) + 1;
+		if (this.streetsCount % 2 == 0) {
+			xDiv = (int) Math.ceil((this.streetsCount / 2)) + 1;
 		}
 		else {
-			xDiv = (int) Math.ceil((this.numOfInputs / 2)) + 2;
+			xDiv = (int) Math.ceil((this.streetsCount / 2)) + 2;
 		}
-		int yDiv = (int) Math.ceil((this.numOfInputs / 2)) + 1;
+		int yDiv = (int) Math.ceil((this.streetsCount / 2)) + 1;
 		int xVar = this.getPreferredSize().width / xDiv;
 		int yVar = this.getPreferredSize().height / yDiv;
 		int j = 1;
-		double jumpValue = Math.ceil(((double) this.numOfInputs / (double) 2));
+		double jumpValue = Math.ceil(((double) this.streetsCount / (double) 2));
 		int addValue;
 		int addValue2;
 		int stabValue = 0;
 		
-		if (this.numOfInputs % 2 == 0) {
+		if (this.streetsCount % 2 == 0) {
 			addValue = 1;
 			addValue2 = 0;
 		}
@@ -60,7 +60,7 @@ public class TrafficPanel extends JPanel {
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + j)));
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + jumpValue * 3 - j + addValue + addValue2)));
 				for (int k = 0; k < Math.ceil((double) this.roadLine.length / (double) 2); k++) {
-					if ((this.numOfInputs == 5 && j == 3) || (this.numOfInputs == 7 && j == 4)) {
+					if ((this.streetsCount == 5 && j == 3) || (this.streetsCount == 7 && j == 4)) {
 						stabValue = -1;
 					}
 					g.fillOval(xVar - 5 + (k * xVar), yVar * (j + stabValue) - 5, 10, 10);
