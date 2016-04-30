@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.print.attribute.standard.NumberOfDocuments;
 import javax.swing.JFrame;
@@ -172,8 +173,9 @@ public class TrafficFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(this.getPanelInputVariables().getButtonCalculateDependentVariables().equals(e.getSource())){
 			JTextField[] textFields = this.getPanelInputVariables().getPanelInput().getTextFieldInputs();
+			int[] inputValues = new int[textFields.length];
 			boolean inputIsValid = true;
-			for (int i = 0; i < textFields.length; i++) {
+			/*for (int i = 0; i < textFields.length; i++) {
 				try {
 				     if(Integer.parseInt(textFields[i].getText()) < 0){
 				    	inputIsValid = false;
@@ -186,12 +188,19 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			    	JOptionPane.showMessageDialog(this, "No valid value at input \"" + (char)(65 + i) + "\"");
 					break;
 				}
+			}*/
+			
+			//Temp for testing
+			Random r = new Random();
+			for (int i = 0; i < inputValues.length; i++) {
+				inputValues[i] = r.nextInt(1000);
 			}
+			
 			if(inputIsValid){
-				int[] inputValues = new int[textFields.length];
+				/*
 				for (int i = 0; i < inputValues.length; i++) {
 					inputValues[i] = Integer.parseInt(textFields[i].getText());
-				}
+				}*/
 				double[][] A = new double[this.getNumOfVariables()][this.getNumOfVariables()];
 				double[] b = new double[this.getNumOfVariables()];
 				for (int i = 0; i < this.getNumOfVariables(); i++) {
@@ -349,7 +358,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 							// Fila superior (no incluye a las esquinas)
 							int westNodePos = column-1;
 							int eastNodePos = column+1;
-							int southNodePos = column - this.getDirectionsV().length - 1;
+							int southNodePos = column + this.getDirectionsV().length - 1;
 							if(this.getDirectionsV()[column]){	
 								if(this.getDirectionsH()[row]){
 									A[nodeNum][westNodePos] = -1;
