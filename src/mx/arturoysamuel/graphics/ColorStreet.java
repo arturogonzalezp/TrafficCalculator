@@ -13,6 +13,7 @@ public class ColorStreet {
 	private int yLast;
 	private int colorCodeRed;
 	private int colorCodeGreen;
+	private String test;
 	Line2D colorStreet;
 	
 	public ColorStreet(String xVariable, int xInitial, int yInitial, int xLast, int yLast) {
