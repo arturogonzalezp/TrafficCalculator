@@ -347,10 +347,63 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					}else{
 						if(row == 0){
 							// Fila superior (no incluye a las esquinas)
+							int westNodePos = column-1;
+							int eastNodePos = column+1;
+							int southNodePos = column - this.getDirectionsV().length - 1;
+							if(this.getDirectionsV()[column]){	
+								if(this.getDirectionsH()[row]){
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = 1;
+								}else{
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = -1;
+								}
+							}else{
+								if(this.getDirectionsH()[row]){
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = -1;
+								}else{
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = 1;
+								}
+							}
+							b[nodeNum] = inputValues[column];
+							
 						}else if(row == (this.getNumOfVariables() - 1)){
 							// Fila inferior (no incluye a las esquinas)
+							int westNodePos = column-1;
+							int eastNodePos = column+1;
+							int southNodePos = column - this.getDirectionsV().length - 1;
+							if(this.getDirectionsV()[column]){	
+								if(this.getDirectionsH()[row]){
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = 1;
+								}else{
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = -1;
+								}
+							}else{
+								if(this.getDirectionsH()[row]){
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = -1;
+								}else{
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									A[nodeNum][eastNodePos] = 1;
+								}
+							}
+							b[nodeNum] = inputValues[column];
+							
 						} if(column == 0){
 							// Lado izquierdo (no incluye a las esquinas)
+							
 						}else if(column == (this.getNumOfVariables() - 1)){
 							// Lado derecho (no incluye a las esquinas
 						}else{
