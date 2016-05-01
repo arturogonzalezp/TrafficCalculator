@@ -514,13 +514,13 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				for (int i = 0; i < this.getFinalEcuations().length; i++) {
 					System.out.println("X" + (i + 1) + " = " + this.getFinalEcuations()[i]);
 				}
-				
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().setInputs(dependentVariablesIndex);
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().setButtonCalculateEcuations(new JButton("Calculate"));
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().addActionListener(this);
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().add(this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations());
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().setAlignmentX(Component.CENTER_ALIGNMENT);
 				this.getPanelDependentVariables().getPanelDependentVariablesInput().updatePanel();
+				this.getPanelDependentVariables().getPanelVariablesFinalResult().addEcuations(this.getFinalEcuations());
 			}
 		}else if(this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().equals(e.getSource())){
 			// Evento de Variables dependientes
@@ -566,6 +566,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					}
 					Collections.sort(valuesMaxMin);
 					System.out.println("\nMin: " + valuesMaxMin.get(0) + "\nMax: " + valuesMaxMin.get(valuesMaxMin.size()-1));
+					this.getPanelDependentVariables().getPanelVariablesFinalResult().printResults(resultXValues);
 					//this.getPanelTraffic().setColorToStreets(resultValues,valuesMaxMin.get(0),valuesMaxMin.get(valuesMaxMin.size()-1));
 				}
 			}
