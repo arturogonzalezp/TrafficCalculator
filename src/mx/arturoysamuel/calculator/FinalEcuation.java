@@ -65,9 +65,6 @@ public class FinalEcuation {
 		for (XValue value : this.getxValues()) {
 			s += value + " ";
 		}
-		if(this.getResult() >= 0){
-			s+= "= " + this.getResult();
-		}
 		return s;
 	}
 }

@@ -24,10 +24,10 @@ public class Main {
 				{0, 1, 0, 0, -1, 0, 0},
 				{0, 0, 1, 0, 0, 1, 0},
 				{0, 0, 0, 1, 0, 1, -1},
-				{0, 0, 0, 0, -1, 0, 1},
+				{0, 0, 0, 0, 1, 0, -1},
 				{0, 0, 0, 0, 0, 0, 0}
 	        };
-		double[] b = {800, 200, 500, 750, 600, 50, 0};*/
+		double[] b = {800, 200, 500, 750, 600, -50, 0};*/
 		/*double[][] A = {
 				{1,0,1,0,0,0,0,0,0,0,0,0},
 				{1,-1,0,1,0,0,0,0,0,0,0,0},
@@ -118,7 +118,7 @@ public class Main {
 			System.out.println("X" + (i + 1) + " = " + finalEcuations[i]);
 		}
 		
-		System.out.println("\nAdd missing values... ");
+		/*System.out.println("\nAdd missing values... ");
 		for (Integer dependentVariableIndex : dependentVariablesIndex) {
 			int dependentVariableValue = Integer.parseInt(JOptionPane.showInputDialog(null, "Value of X" + (dependentVariableIndex + 1) + ": "));
 			dependentVariables.add(new DependentVariable(dependentVariableIndex, dependentVariableValue));

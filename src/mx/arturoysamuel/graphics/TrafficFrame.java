@@ -267,7 +267,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 						}
 						
 					}else if(row == (this.getDirectionsH().length - 1) && column == 0){
-						// Esquina izquierda inferior FALTAN las A!!!!!!
+						// Esquina izquierda inferior
 						int eastNodePos = (this.getNumOfVariables()-1) - (this.getDirectionsV().length - 2);
 						int northNodePost = eastNodePos - this.getDirectionsV().length;
 						
@@ -373,69 +373,176 @@ public class TrafficFrame extends JFrame implements ActionListener{
 							}
 						}
 					}else{
+						System.out.println("Row: " + row + "\nColumn: " + column);
 						if(row == 0){
 							// Fila superior (no incluye a las esquinas)
+							//System.out.println("Enter Fila Superior:\nRow : " + row + "\nColumn: " + column + "\n\n");
 							int westNodePos = column-1;
-							int eastNodePos = column+1;
+							int eastNodePos = westNodePos+1;
 							int southNodePos = column + this.getDirectionsV().length - 1;
 							if(this.getDirectionsV()[column]){	
 								if(this.getDirectionsH()[row]){
 									A[nodeNum][westNodePos] = -1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = 1;
 								}else{
 									A[nodeNum][westNodePos] = 1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = -1;
 								}
 							}else{
 								if(this.getDirectionsH()[row]){
 									A[nodeNum][westNodePos] = 1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = -1;
 								}else{
 									A[nodeNum][westNodePos] = -1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = 1;
 								}
 							}
+							A[nodeNum][southNodePos] = 1;
 							b[nodeNum] = inputValues[column];
 							
-						}else if(row == (this.getNumOfVariables() - 1)){
+						}else if(row == (this.getDirectionsH().length - 1)){
 							// Fila inferior (no incluye a las esquinas)
-							int westNodePos = column-1;
-							int eastNodePos = column+1;
-							int southNodePos = column - this.getDirectionsV().length - 1;
+							
+							int westNodePos = ((this.getDirectionsH().length - 1) * ((2*this.getDirectionsV().length)-1)) + (column - 1);
+							int eastNodePos = westNodePos + 1;
+							int northNodePos = eastNodePos - this.getDirectionsV().length;
+							int independentValuePos = (2*this.getDirectionsV().length) + this.getDirectionsH().length - column - 1; 
 							if(this.getDirectionsV()[column]){	
 								if(this.getDirectionsH()[row]){
-									A[nodeNum][westNodePos] = -1;
-									A[nodeNum][southNodePos] = 1;
-									A[nodeNum][eastNodePos] = 1;
-								}else{
+									
 									A[nodeNum][westNodePos] = 1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = -1;
+									
+								}else{
+									
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][eastNodePos] = 1;
+									
 								}
 							}else{
 								if(this.getDirectionsH()[row]){
-									A[nodeNum][westNodePos] = 1;
-									A[nodeNum][southNodePos] = 1;
-									A[nodeNum][eastNodePos] = -1;
-								}else{
+									
 									A[nodeNum][westNodePos] = -1;
-									A[nodeNum][southNodePos] = 1;
 									A[nodeNum][eastNodePos] = 1;
+									
+								}else{
+									
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][eastNodePos] = -1;
+									
 								}
 							}
-							b[nodeNum] = inputValues[column];
+							A[nodeNum][northNodePos] = 1;
+							b[nodeNum] = inputValues[independentValuePos];
 							
 						} if(column == 0){
 							// Lado izquierdo (no incluye a las esquinas)
+							int eastNodePos = ((2*row)*(this.getDirectionsV().length-1)) + row;
+							int northNodePos = eastNodePos - this.getDirectionsV().length;
+							int southNodePos = eastNodePos + northNodePos;
+							if(this.getDirectionsV()[column]){	
+								if(this.getDirectionsH()[row]){
+									
+									A[nodeNum][northNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									
+								}else{
+
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									
+								}
+							}else{
+								if(this.getDirectionsH()[row]){
+									
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									
+								}else{
+									
+									A[nodeNum][northNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									
+								}
+							}
+							A[nodeNum][eastNodePos] = 1;
+							b[nodeNum] = inputValues[inputValues.length-(row+1)];
 							
-						}else if(column == (this.getNumOfVariables() - 1)){
-							// Lado derecho (no incluye a las esquinas
-						}else{
+						}else if(column == (this.getDirectionsV().length - 1)){
+							// Lado derecho (no incluye a las esquinas)
+							int northNodePos = ((2*row)*(this.getDirectionsV().length - 1)) + (row - 1);
+							int westNodePos = northNodePos + this.getDirectionsV().length - 1;
+							int southNodePos = westNodePos + this.getDirectionsV().length;
+							System.out.println("West: " + westNodePos + "\nNorth: " + northNodePos + "\nSouth: " + southNodePos + "\n");
+							if(this.getDirectionsV()[column]){	
+								if(this.getDirectionsH()[row]){
+									
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									
+								}else{
+
+									A[nodeNum][northNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									
+								}
+							}else{
+								if(this.getDirectionsH()[row]){
+									
+									A[nodeNum][northNodePos] = -1;
+									A[nodeNum][southNodePos] = 1;
+									
+								}else{
+									
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									
+								}
+							}
+							A[nodeNum][westNodePos] = 1;
+							b[nodeNum] = inputValues[this.getDirectionsV().length + row];
+							
+						}else if(row != 0 && row != (this.getDirectionsH().length - 1) && column != 0 && column != (this.getDirectionsV().length - 1)){
 							// Nodos Internos
+							int eastNodePos = (row*((2*this.getDirectionsV().length)-1)) + column - 1;
+							int northNodePos = eastNodePos - (this.getDirectionsV().length - 1);
+							int southNodePos = eastNodePos + this.getDirectionsV().length;
+							int westNodePos = eastNodePos + 1;
+							//System.out.println("Row: " + row + "\nColumn: " + column + "\nEastNode: " + eastNodePos + "\nNorthNode: " + northNodePos + "\nSouthNode: " + southNodePos + "\nWestNode: " + westNodePos);
+							if(this.getDirectionsV()[column]){	
+								if(this.getDirectionsH()[row]){
+									
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									A[nodeNum][eastNodePos] = -1;
+									
+								}else{
+
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = -1;
+									A[nodeNum][eastNodePos] = 1;
+									
+								}
+							}else{
+								if(this.getDirectionsH()[row]){
+
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][westNodePos] = -1;
+									A[nodeNum][southNodePos] = -1;
+									A[nodeNum][eastNodePos] = 1;
+									
+								}else{
+
+									A[nodeNum][northNodePos] = 1;
+									A[nodeNum][westNodePos] = 1;
+									A[nodeNum][southNodePos] = -1;
+									A[nodeNum][eastNodePos] = -1;
+									
+								}
+							}
+							b[nodeNum] = 0;
 						}
 					}
 					if((column + 1) % (this.getDirectionsV().length) == 0){

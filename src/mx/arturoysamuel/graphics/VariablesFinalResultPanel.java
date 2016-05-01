@@ -27,7 +27,7 @@ public class VariablesFinalResultPanel extends JPanel{
 	public void printResults(List<XValue> xValues){
 		this.emptyPanel();
 		this.addEcuations();
-		JLabel resultsLabel = new JLabel("Resultados");
+		JLabel resultsLabel = new JLabel("Results");
 		resultsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		resultsLabel.setBorder(new EmptyBorder(50, 10, 10, 10));
 		this.getLabels().add(resultsLabel);

@@ -64,7 +64,7 @@ public class GaussJordanElimination {
 	}
 	private void solve() {
         for (int p = 0, q = 0, difference = 0; p < N && q < N; p++, q++) {
-            //showSingleMatrix();
+            showSingleMatrix();
             int max = p;
             for (int i = p+1; i < N; i++) {
                 if (Math.abs(a[i][p]) > Math.abs(a[max][p])) {
