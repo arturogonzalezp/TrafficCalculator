@@ -566,6 +566,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					}
 					Collections.sort(valuesMaxMin);
 					System.out.println("\nMin: " + valuesMaxMin.get(0) + "\nMax: " + valuesMaxMin.get(valuesMaxMin.size()-1));
+					//this.getPanelTraffic().setColorToStreets(resultValues,valuesMaxMin.get(0),valuesMaxMin.get(valuesMaxMin.size()-1));
 				}
 			}
 		}else{
