@@ -134,10 +134,9 @@ public class TrafficPanel extends JPanel {
 		
 		this.colorStreet = new ColorStreet[(this.streetsCount / 2) * ((this.streetsCount / 2) - streetsOdd) + 
 		                                             (((this.streetsCount / 2) - streetsEven - streetsOdd) * ((this.streetsCount / 2) + streetsEven))];
-		
 		for (int i = 0; i < (this.streetsCount / 2); i++) {
 			for (int j = 0; j < (this.streetsCount / 2) - streetsOdd; j++) {;
-				g.drawString("X" + Integer.toString(xIndex + (xIndexVertical * i)), (((widthDivided / 2) + widthDivided)) + (j * widthDivided) - 5, heightDivided * (i + 1) - 10);
+				g.drawString("X" + Integer.toString(xIndex + (xIndexVertical * i) + 1), (((widthDivided / 2) + widthDivided)) + (j * widthDivided) - 5, heightDivided * (i + 1) - 10);
 				this.colorStreet[xIndex + (xIndexVertical * i)] = new ColorStreet(Integer.toString(xIndex + (xIndexVertical * i)),
 						this.xCoordinates[j], this.yCoordinates[i * (xIndexVertical)], 
 						this.xCoordinates[j + 1] , this.yCoordinates[i * (xIndexVertical)]);
@@ -145,7 +144,7 @@ public class TrafficPanel extends JPanel {
 				xIndex++;
 			}
 		}
-		xIndex = xIndexHorizontal;
+		xIndex = xIndexHorizontal + 1;
 		for (int i = 0; i < (this.streetsCount / 2) - streetsEven - streetsOdd; i++) {
 			for (int j = 0; j < (this.streetsCount / 2) + streetsEven; j++) {
 				g.drawString("X" + Integer.toString(xIndex + (xIndexHorizontal * i)),  widthDivided * (j + 1) + 10, (((heightDivided / 2) + heightDivided)) + (i * heightDivided) + 5);
@@ -153,10 +152,6 @@ public class TrafficPanel extends JPanel {
 						this.xCoordinates[j], this.yCoordinates[j],
 						this.xCoordinates[j], this.yCoordinates[(i + 1) * (xIndexVertical)]);
 				g2d.draw(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getColorStreet());
-				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getXInitial() + " ");
-				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getYInitial() + "| ");
-				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getXLast() + " ");
-				System.out.println(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getYLast());
 				xIndex++;
 			}
 		}
@@ -166,7 +161,5 @@ public class TrafficPanel extends JPanel {
 		super.paint(g);
 		paintLines(g);
 		paintVariables(g);
-		g.setColor(Color.RED);
-		
 	}
 }
