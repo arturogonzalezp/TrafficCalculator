@@ -486,7 +486,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					System.out.println("X" + (i + 1) + " = " + results[i]);
 					this.getFinalEcuations()[i] = new FinalEcuation((int) results[i]);
 				}
-
+				
 				for (int i = 0; i < N; i++) {
 					if(dependentVariablesIndex.indexOf(i) == -1){
 						for (int j = i+1; j < solvedSingleMatrix[i].length; j++) {
@@ -497,6 +497,15 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					}else{
 						this.getFinalEcuations()[i].addXValue(1,i);
 					}
+				}
+				for (Integer dependentVariableIndex : dependentVariablesIndex){
+					int addValue = this.getFinalEcuations()[dependentVariableIndex].getIndependentValue();
+					for (int i = 0; i < this.getFinalEcuations().length; i++) {
+						if(dependentVariableIndex != i){
+							this.getFinalEcuations()[i].updateIndependentValue(dependentVariableIndex, addValue);
+						}
+					}
+					this.getFinalEcuations()[dependentVariableIndex].setIndependentValue(0);
 				}
 				
 				System.out.println("\nResult Ecuations: ");
@@ -539,6 +548,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				for (int i = 0; i < this.getFinalEcuations().length; i++) {
 					if(this.getFinalEcuations()[i].solveWithParameters(dependentVariables) < 0){
 						secondInputIsValid = false;
+						JOptionPane.showMessageDialog(this, "The dependent variables cannot have those values, traffic can´t be negative");
 						break;
 					}else{
 						tempPrint += "X" + (i + 1) + " = " + this.getFinalEcuations()[i].toString() + "\n";

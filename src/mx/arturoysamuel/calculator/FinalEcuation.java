@@ -3,6 +3,8 @@ package mx.arturoysamuel.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class FinalEcuation {
 	private List<XValue> xValues;
 	private int independentValue;
@@ -30,6 +32,15 @@ public class FinalEcuation {
 	}
 	public void addXValue(int value, int index){
 		this.getxValues().add(new XValue(value, index));
+	}
+	public void updateIndependentValue(int dependentVariableIndex,int dependentValue){
+		for (XValue xValue : this.getxValues()) {
+			if(xValue.getIndex() == dependentVariableIndex){
+				this.setIndependentValue(this.getIndependentValue() + (xValue.getValue() * dependentValue));
+				break;
+			}
+		}
+		
 	}
 	public int solveWithParameters(List<DependentVariable> dependentVariables){
 		int tempResult = this.getIndependentValue();
