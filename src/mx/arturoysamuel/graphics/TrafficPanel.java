@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -12,11 +13,11 @@ import javax.xml.ws.WebEndpoint;
 
 public class TrafficPanel extends JPanel {
 
-	int streetsCount;
-	RoadLine[] roadLine;
-	ColorStreet[] colorStreet;
-	int[] xCoordinates;
-	int[] yCoordinates;
+	private int streetsCount;
+	private RoadLine[] roadLine;
+	private ColorStreet[] colorStreet;
+	private int[] xCoordinates;
+	private int[] yCoordinates;
 	
 	private static final int X_INIT = 50;
 	private static final int X_LAST = 450;
@@ -55,7 +56,6 @@ public class TrafficPanel extends JPanel {
 		int stabValue = 0;
 		
 		int oddNumberOfStreets;
-		
 		int arrayIndex = 0;
 		
 		if (this.streetsCount % 2 == 0) {
@@ -64,7 +64,6 @@ public class TrafficPanel extends JPanel {
 			oddNumberOfStreets = (int) Math.ceil((double) this.roadLine.length / (double) 2);
 			this.xCoordinates = new int[oddNumberOfStreets * oddNumberOfStreets];
 			this.yCoordinates = new int[oddNumberOfStreets * oddNumberOfStreets];
-			
 		}
 		else {
 			addValue = -1;
@@ -78,7 +77,10 @@ public class TrafficPanel extends JPanel {
 				this.roadLine[i] = new RoadLine(0, xVar * j, Y_INIT, xVar * j, Y_LAST);
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + j)));
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + jumpValue * 3 - j + addValue + addValue2)));
-				for (int k = 0; k < oddNumberOfStreets; k++) {
+				for (int k = 0; k < oddNumberOfStreets + addValue2; k++) {
+					if (j == oddNumberOfStreets + 1) {
+						break;
+					}
 					if ((this.streetsCount == 5 && j == 3) || (this.streetsCount == 7 && j == 4)) {
 						stabValue = -1;
 					}
@@ -88,7 +90,6 @@ public class TrafficPanel extends JPanel {
 					arrayIndex++;
 				}
 			}
-			
 			else {
 				this.roadLine[i] = new RoadLine(0, X_INIT, yVar * j, X_LAST, yVar * j);
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + j + jumpValue)));
@@ -99,9 +100,9 @@ public class TrafficPanel extends JPanel {
 		}	
 	}
 
+	
 	public void paintVariables(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		
 		int xIndex = 0;
 		int streetsEven;
 		int streetsOdd;
@@ -135,34 +136,37 @@ public class TrafficPanel extends JPanel {
 		                                             (((this.streetsCount / 2) - streetsEven - streetsOdd) * ((this.streetsCount / 2) + streetsEven))];
 		
 		for (int i = 0; i < (this.streetsCount / 2); i++) {
-			for (int j = 0; j < (this.streetsCount / 2) - streetsOdd; j++) {
-				g.setColor(Color.BLACK);
-				g.drawString("X" + Integer.toString(xIndex++ + (xIndexVertical * i)), (((widthDivided / 2) + widthDivided)) + (j * widthDivided) - 5, heightDivided * (i + 1) - 10);
-				g.setColor(Color.RED);
-				this.colorStreet[xIndex + (xIndexVertical * i) - 1] = new ColorStreet(Integer.toString(xIndex + (xIndexVertical * i)),
+			for (int j = 0; j < (this.streetsCount / 2) - streetsOdd; j++) {;
+				g.drawString("X" + Integer.toString(xIndex + (xIndexVertical * i)), (((widthDivided / 2) + widthDivided)) + (j * widthDivided) - 5, heightDivided * (i + 1) - 10);
+				this.colorStreet[xIndex + (xIndexVertical * i)] = new ColorStreet(Integer.toString(xIndex + (xIndexVertical * i)),
 						this.xCoordinates[j], this.yCoordinates[i * (xIndexVertical)], 
 						this.xCoordinates[j + 1] , this.yCoordinates[i * (xIndexVertical)]);
-				g2d.draw(this.colorStreet[xIndex + (xIndexVertical * i) - 1].getColorStreet());
+				g2d.draw(this.colorStreet[xIndex + (xIndexVertical * i)].getColorStreet());
+				xIndex++;
 			}
 		}
 		xIndex = xIndexHorizontal;
 		for (int i = 0; i < (this.streetsCount / 2) - streetsEven - streetsOdd; i++) {
 			for (int j = 0; j < (this.streetsCount / 2) + streetsEven; j++) {
-				g.setColor(Color.BLACK);
-				g.drawString("X" + Integer.toString(xIndex++ + (xIndexHorizontal * i)),  widthDivided * (j + 1) + 10, (((heightDivided / 2) + heightDivided)) + (i * heightDivided) + 5);
-				g.setColor(Color.GREEN);
-				//this.colorStreet[xIndex + (xIndexHorizontal * i) - 1] = new ColorStreet(Integer.toString(xIndex + (xIndexHorizontal * i)),
-					//this.xCoordinates[i], this.yCoordinates[j * (xIndexHorizontal)], 
-					//this.xCoordinates[i], this.yCoordinates[(j + 1) * (xIndexHorizontal - 1)]);
-				//g2d.draw(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getColorStreet());
+				g.drawString("X" + Integer.toString(xIndex + (xIndexHorizontal * i)),  widthDivided * (j + 1) + 10, (((heightDivided / 2) + heightDivided)) + (i * heightDivided) + 5);
+				this.colorStreet[xIndex + (xIndexHorizontal * i) - 1] = new ColorStreet(Integer.toString(xIndex) + (xIndexHorizontal * i),
+						this.xCoordinates[j], this.yCoordinates[j],
+						this.xCoordinates[j], this.yCoordinates[(i + 1) * (xIndexVertical)]);
+				g2d.draw(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getColorStreet());
+				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getXInitial() + " ");
+				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getYInitial() + "| ");
+				System.out.print(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getXLast() + " ");
+				System.out.println(this.colorStreet[xIndex + (xIndexHorizontal * i) - 1].getYLast());
+				xIndex++;
 			}
 		}
 	}
-	
 	
 	public void paint(Graphics g) {
 		super.paint(g);
 		paintLines(g);
 		paintVariables(g);
+		g.setColor(Color.RED);
+		
 	}
 }

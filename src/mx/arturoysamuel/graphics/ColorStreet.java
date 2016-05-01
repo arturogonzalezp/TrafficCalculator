@@ -13,7 +13,6 @@ public class ColorStreet {
 	private int yLast;
 	private int colorCodeRed;
 	private int colorCodeGreen;
-	private String test;
 	Line2D colorStreet;
 	
 	public ColorStreet(String xVariable, int xInitial, int yInitial, int xLast, int yLast) {
@@ -54,7 +53,7 @@ public class ColorStreet {
 	}
 	
 	public int getXLast() {
-		return this.xInitial;
+		return this.xLast;
 	}
 	
 	public void setYLast(int yLast) {
@@ -62,7 +61,7 @@ public class ColorStreet {
 	}
 	
 	public int getYLast() {
-		return this.yInitial;
+		return this.yLast;
 	}
 	
 	
@@ -86,7 +85,7 @@ public class ColorStreet {
 		return this.colorStreet;
 	}
 	
-	public void paintStreet(Graphics g) {
-		g.setColor(new Color(this.colorCodeRed, this.colorCodeGreen, 0));
+	public Color getStreetColor() {
+		return new Color(this.getColorCodeRed(), this.getColorCodeGreen(), 0);
 	}
 }
