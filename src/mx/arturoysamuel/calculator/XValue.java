@@ -19,6 +19,9 @@ public class XValue {
 	public void setValue(int value) {
 		this.value = value;
 	}
+	public String drawString(){
+		return "X" + (this.getIndex() + 1);
+	}
 	public String toString(){
 		if(this.getValue() > 0){
 			return "+X" + (this.getIndex() + 1);

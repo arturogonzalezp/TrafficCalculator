@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ import javax.swing.JTextField;
 import mx.arturoysamuel.calculator.DependentVariable;
 import mx.arturoysamuel.calculator.FinalEcuation;
 import mx.arturoysamuel.calculator.GaussJordanElimination;
+import mx.arturoysamuel.calculator.XValue;
 
 public class TrafficFrame extends JFrame implements ActionListener{
 	private TrafficPanel panelTraffic;
@@ -541,7 +543,6 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			
 			if(inputIsValid){
 				boolean secondInputIsValid = true;
-				String tempPrint = "";
 				for (int i = 0; i < textFields.length; i++) {
 					this.getDependentVariables().get(i).setValue(Integer.parseInt(textFields[i].getText()));
 				}
@@ -550,12 +551,21 @@ public class TrafficFrame extends JFrame implements ActionListener{
 						secondInputIsValid = false;
 						JOptionPane.showMessageDialog(this, "The dependent variables cannot have those values, traffic can´t be negative");
 						break;
-					}else{
-						tempPrint += "X" + (i + 1) + " = " + this.getFinalEcuations()[i].toString() + "\n";
 					}
 				}
 				if(secondInputIsValid){
-					JOptionPane.showMessageDialog(this, "Solved:\n" + tempPrint);
+					List<XValue> resultXValues = new ArrayList<XValue>();
+					List<Integer> valuesMaxMin = new ArrayList<Integer>();
+					for (int i = 0; i < this.getFinalEcuations().length; i++) {
+						resultXValues.add(new XValue(this.getFinalEcuations()[i].getResult(),i));
+						valuesMaxMin.add(this.getFinalEcuations()[i].getResult());
+					}
+					System.out.println("\nFinal Result Variables: ");
+					for (XValue xValue : resultXValues) {
+						System.out.println(xValue.drawString() + " = " + xValue.getValue());
+					}
+					Collections.sort(valuesMaxMin);
+					System.out.println("\nMin: " + valuesMaxMin.get(0) + "\nMax: " + valuesMaxMin.get(valuesMaxMin.size()-1));
 				}
 			}
 		}else{
