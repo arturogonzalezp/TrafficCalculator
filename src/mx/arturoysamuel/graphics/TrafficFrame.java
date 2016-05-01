@@ -1,13 +1,14 @@
 package mx.arturoysamuel.graphics;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.print.attribute.standard.NumberOfDocuments;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -25,6 +26,8 @@ public class TrafficFrame extends JFrame implements ActionListener{
 	private int streetsCount;
 	private int numOfVariables;
 	private int numOfNodes;
+	private FinalEcuation[] finalEcuations;
+	private List<DependentVariable> dependentVariables;
 	// True is down or right, False is up or left
 	private boolean[] directionsV;
 	private boolean[] directionsH;
@@ -92,7 +95,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				this.getDirectionsV()[i] = true;
 			}
 		}
-		
+		this.setDependentVariables(new ArrayList<DependentVariable>());
 		this.setPanelTraffic(new TrafficPanel(streetsCount));
 		this.setPanelInputVariables(new InputVariablesPanel(streetsCount));
 		this.setPanelDependentVariables(new DependentVariablesPanel());
@@ -100,11 +103,11 @@ public class TrafficFrame extends JFrame implements ActionListener{
 		this.add(this.getPanelInputVariables(), BorderLayout.CENTER);
 		this.add(this.getPanelDependentVariables(), BorderLayout.EAST);
 		this.pack();
+		this.getPanelInputVariables().getButtonCalculateDependentVariables().addActionListener(this);
 		this.setVisible(true);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getPanelInputVariables().getButtonCalculateDependentVariables().addActionListener(this);
 	}
 	public int getMaxNumberOfStreets() {
 		return maxNumberOfStreets;
@@ -169,13 +172,27 @@ public class TrafficFrame extends JFrame implements ActionListener{
 	public void setDirectionsH(boolean[] directionsH) {
 		this.directionsH = directionsH;
 	}
+	public FinalEcuation[] getFinalEcuations() {
+		return finalEcuations;
+	}
+	public void setFinalEcuations(FinalEcuation[] finalEcuations) {
+		this.finalEcuations = finalEcuations;
+	}
+	public List<DependentVariable> getDependentVariables() {
+		return dependentVariables;
+	}
+	public void setDependentVariables(List<DependentVariable> dependentVariables) {
+		this.dependentVariables = dependentVariables;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(this.getPanelInputVariables().getButtonCalculateDependentVariables().equals(e.getSource())){
+			JButton calculateEcuationsButton = (JButton) e.getSource();
+			calculateEcuationsButton.setEnabled(false);
 			JTextField[] textFields = this.getPanelInputVariables().getPanelInput().getTextFieldInputs();
 			int[] inputValues = new int[textFields.length];
 			boolean inputIsValid = true;
-			/*for (int i = 0; i < textFields.length; i++) {
+			for (int i = 0; i < textFields.length; i++) {
 				try {
 				     if(Integer.parseInt(textFields[i].getText()) < 0){
 				    	inputIsValid = false;
@@ -188,19 +205,19 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			    	JOptionPane.showMessageDialog(this, "No valid value at input \"" + (char)(65 + i) + "\"");
 					break;
 				}
-			}*/
-			
-			//Temp for testing
-			Random r = new Random();
-			for (int i = 0; i < inputValues.length; i++) {
-				inputValues[i] = r.nextInt(1000);
 			}
 			
+			//Temp for testing
+			/*Random r = new Random();
+			for (int i = 0; i < inputValues.length; i++) {
+				inputValues[i] = r.nextInt(1000);
+			}*/
+			
 			if(inputIsValid){
-				/*
 				for (int i = 0; i < inputValues.length; i++) {
 					inputValues[i] = Integer.parseInt(textFields[i].getText());
-				}*/
+					textFields[i].setEditable(false);
+				}
 				double[][] A = new double[this.getNumOfVariables()][this.getNumOfVariables()];
 				double[] b = new double[this.getNumOfVariables()];
 				for (int i = 0; i < this.getNumOfVariables(); i++) {
@@ -433,14 +450,14 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					}
 					System.out.println(" | " + b[i]);
 				}
+				
 				GaussJordanElimination gj = new GaussJordanElimination(A, b);
 				List<Integer> dependentVariablesIndex = gj.getDependentVariables();
-				List<DependentVariable> dependentVariables = new ArrayList<DependentVariable>();
 				double[] results = gj.getResults();
 				double[][] solvedSingleMatrix = gj.getSolvedSingleMatrix();
 				double[][] originalMatrix = gj.getOriginalMatrix();
 				int N = gj.getN();
-				FinalEcuation[] finalEcuations = new FinalEcuation[N];
+				this.setFinalEcuations(new FinalEcuation[N]);
 				
 				System.out.println("Original Matrix: ");
 				for (int i = 0; i < originalMatrix.length; i++) {
@@ -460,61 +477,76 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				
 				System.out.println("\nDependent Variables: ");
 				for (Integer dependentVariableIndex : dependentVariablesIndex) {
+					this.getDependentVariables().add(new DependentVariable(dependentVariableIndex));
 					System.out.println("X" + (dependentVariableIndex + 1) + " = " + "X" + (dependentVariableIndex + 1));
 				}
 						
 				System.out.println("\nMatrix Results: ");
 				for (int i = 0; i < results.length; i++) {
 					System.out.println("X" + (i + 1) + " = " + results[i]);
-					finalEcuations[i] = new FinalEcuation((int) results[i]);
+					this.getFinalEcuations()[i] = new FinalEcuation((int) results[i]);
 				}
 
 				for (int i = 0; i < N; i++) {
 					if(dependentVariablesIndex.indexOf(i) == -1){
 						for (int j = i+1; j < solvedSingleMatrix[i].length; j++) {
 							if(solvedSingleMatrix[i][j] != 0){
-								finalEcuations[i].addXValue((int) -solvedSingleMatrix[i][j],j);
+								this.getFinalEcuations()[i].addXValue((int) -solvedSingleMatrix[i][j],j);
 							}
 						}
 					}else{
-						finalEcuations[i].addXValue(1,i);
+						this.getFinalEcuations()[i].addXValue(1,i);
 					}
 				}
 				
 				System.out.println("\nResult Ecuations: ");
-				for (int i = 0; i < finalEcuations.length; i++) {
-					System.out.println("X" + (i + 1) + " = " + finalEcuations[i]);
+				for (int i = 0; i < this.getFinalEcuations().length; i++) {
+					System.out.println("X" + (i + 1) + " = " + this.getFinalEcuations()[i]);
 				}
 				
-				System.out.println("Almost end...");
-				
-				/*for (int i = 0; i < this.getNumOfVariables(); i++) {
-					for (int j = 0; j < this.getNumOfVariables(); j++) {
-						// For para recorrer la matriz con los valores
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().setInputs(dependentVariablesIndex);
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().setButtonCalculateEcuations(new JButton("Calculate"));
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().addActionListener(this);
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().add(this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations());
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().setAlignmentX(Component.CENTER_ALIGNMENT);
+				this.getPanelDependentVariables().getPanelDependentVariablesInput().updatePanel();
+			}
+		}else if(this.getPanelDependentVariables().getPanelDependentVariablesInput().getButtonCalculateEcuations().equals(e.getSource())){
+			// Evento de Variables dependientes
+			JTextField[] textFields = this.getPanelDependentVariables().getPanelDependentVariablesInput().getPanelDependentVariablesInputContainer().getTextFieldDependentVariables();
+			boolean inputIsValid = true;
+			for (int i = 0; i < textFields.length; i++) {
+				try {
+				     if(Integer.parseInt(textFields[i].getText()) < 0){
+				    	inputIsValid = false;
+				    	JOptionPane.showMessageDialog(this, "No negative numbers");
+				    	break;
+				     }
+				}
+				catch (NumberFormatException ex) {
+					inputIsValid = false;
+			    	JOptionPane.showMessageDialog(this, "No valid values");
+					break;
+				}
+			}
+			
+			if(inputIsValid){
+				boolean secondInputIsValid = true;
+				String tempPrint = "";
+				for (int i = 0; i < textFields.length; i++) {
+					this.getDependentVariables().get(i).setValue(Integer.parseInt(textFields[i].getText()));
+				}
+				for (int i = 0; i < this.getFinalEcuations().length; i++) {
+					if(this.getFinalEcuations()[i].solveWithParameters(dependentVariables) < 0){
+						secondInputIsValid = false;
+						break;
+					}else{
+						tempPrint += "X" + (i + 1) + " = " + this.getFinalEcuations()[i].toString() + "\n";
 					}
-				}*/
-				/* if(i == 0 && j == 0){
-							// Esquina izquierda superior
-						}else if(i == (this.getNumOfVariables() - 1) && j == 0){
-							// Esquina izquierda inferior
-						}else if(i == 0 && j == (this.getNumOfNodes() - 1)){
-							// Esquina derecha superior
-						}else if(i == (this.getNumOfVariables() - 1) && j == (this.getNumOfNodes() - 1)){
-							// Esquina derecha inferior
-						}else{
-							if(i == 0){
-								// Fila superior (no incluye a las esquinas)
-							}else if(i == (this.getNumOfVariables() - 1)){
-								// Fila inferior (no incluye a las esquinas)
-							} if(j == 0){
-								// Lado izquierdo (no incluye a las esquinas)
-							}else if(j == (this.getNumOfVariables() - 1)){
-								// Lado derecho (no incluye a las esquinas
-							}else{
-								// Nodos Internos
-							}
-						}
-				 */
+				}
+				if(secondInputIsValid){
+					JOptionPane.showMessageDialog(this, "Solved:\n" + tempPrint);
+				}
 			}
 		}else{
 			// Otro evento 
