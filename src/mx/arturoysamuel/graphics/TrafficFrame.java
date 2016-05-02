@@ -190,7 +190,6 @@ public class TrafficFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(this.getPanelInputVariables().getButtonCalculateDependentVariables().equals(e.getSource())){
 			JButton calculateEcuationsButton = (JButton) e.getSource();
-			calculateEcuationsButton.setEnabled(false);
 			JTextField[] textFields = this.getPanelInputVariables().getPanelInput().getTextFieldInputs();
 			int[] inputValues = new int[textFields.length];
 			boolean inputIsValid = true;
@@ -216,6 +215,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			}*/
 			
 			if(inputIsValid){
+				calculateEcuationsButton.setEnabled(false);
 				for (int i = 0; i < inputValues.length; i++) {
 					inputValues[i] = Integer.parseInt(textFields[i].getText());
 					textFields[i].setEditable(false);

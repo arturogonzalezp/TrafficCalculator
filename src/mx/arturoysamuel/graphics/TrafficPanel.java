@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.time.chrono.MinguoChronology;
 import java.util.List;
 
 import javax.swing.BorderFactory;
