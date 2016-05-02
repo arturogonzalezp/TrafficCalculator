@@ -207,7 +207,38 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					break;
 				}
 			}
-			
+			if(inputIsValid){
+				int enterValues = 0;
+				int exitValues = 0;
+				int tempCounter = 0;
+				for (int i = 0; i < this.getDirectionsV().length; i++) {
+					int upPos = tempCounter;
+					int downPos = (2*this.getDirectionsV().length) + this.getDirectionsH().length - upPos - 1;
+					if(this.getDirectionsV()[i]){
+						enterValues += Integer.parseInt(textFields[upPos].getText());
+						exitValues += Integer.parseInt(textFields[downPos].getText());
+					}else{
+						exitValues += Integer.parseInt(textFields[upPos].getText());
+						enterValues += Integer.parseInt(textFields[downPos].getText());
+					}tempCounter++;
+				}
+				for (int i = 0; i < this.getDirectionsH().length; i++) {
+					int rightPos = tempCounter;
+					int leftPos = textFields.length - (tempCounter - this.getDirectionsV().length) - 1;
+					if(this.getDirectionsH()[i]){
+						enterValues += Integer.parseInt(textFields[leftPos].getText());
+						exitValues += Integer.parseInt(textFields[rightPos].getText());
+					}else{
+						exitValues += Integer.parseInt(textFields[leftPos].getText());
+						enterValues += Integer.parseInt(textFields[rightPos].getText());
+					}
+					tempCounter++;
+				}
+				if(exitValues != enterValues){
+					inputIsValid = false;
+					JOptionPane.showMessageDialog(this, "Same number of cars that enter must go out!");
+				}
+			}
 			//Temp for testing
 			/*Random r = new Random();
 			for (int i = 0; i < inputValues.length; i++) {
@@ -675,12 +706,12 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					int maxValue,minValue;
 					maxValue = valuesMaxMin.get(valuesMaxMin.size()-1);
 					minValue = valuesMaxMin.get(0);
-					for (Integer valueMaxMin : valuesMaxMin) {
+					/*for (Integer valueMaxMin : valuesMaxMin) {
 						if(valueMaxMin > 0){
 							minValue = valueMaxMin;
 							break;
 						}
-					}
+					}*/
 					System.out.println("\nMin: " + minValue + "\nMax: " + maxValue);
 					this.getPanelDependentVariables().getPanelVariablesFinalResult().printResults(resultXValues);
 					this.getPanelTraffic().setXValue(resultXValues);
