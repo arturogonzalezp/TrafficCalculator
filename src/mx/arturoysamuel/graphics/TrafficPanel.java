@@ -208,7 +208,7 @@ public class TrafficPanel extends JPanel {
 		ColorStreet tempColorStreet[] = new ColorStreet[this.colorStreet.length];
 		for (int i = 0; i < this.colorStreet.length; i++) {
 			g2d.setStroke(new BasicStroke(3));
-			double valuePower = ((double)resultXValues.get(i).getValue() / (double)maxValue);
+			double valuePower = (double)resultXValues.get(i).getValue() / (double)maxValue;
 			g2d.setColor(this.getColorByPower(valuePower));
 			tempColorStreet[i] = new ColorStreet("X" + resultXValues.get(i).getIndex(), this.colorStreet[i].getXInitial(), this.colorStreet[i].getYInitial(), this.colorStreet[i].getXLast(), this.colorStreet[i].getYLast());
 			g2d.draw(tempColorStreet[i].getColorStreet());

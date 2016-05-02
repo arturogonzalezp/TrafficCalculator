@@ -672,13 +672,22 @@ public class TrafficFrame extends JFrame implements ActionListener{
 						System.out.println(xValue.drawString() + " = " + xValue.getValue());
 					}
 					Collections.sort(valuesMaxMin);
-					System.out.println("\nMin: " + valuesMaxMin.get(0) + "\nMax: " + valuesMaxMin.get(valuesMaxMin.size()-1));
+					int maxValue,minValue;
+					maxValue = valuesMaxMin.get(valuesMaxMin.size()-1);
+					minValue = valuesMaxMin.get(0);
+					for (Integer valueMaxMin : valuesMaxMin) {
+						if(valueMaxMin > 0){
+							minValue = valueMaxMin;
+							break;
+						}
+					}
+					System.out.println("\nMin: " + minValue + "\nMax: " + maxValue);
 					this.getPanelDependentVariables().getPanelVariablesFinalResult().printResults(resultXValues);
 					this.getPanelTraffic().setXValue(resultXValues);
-					this.getPanelTraffic().setMinValue(valuesMaxMin.get(0));
-					this.getPanelTraffic().setMaxValue(valuesMaxMin.get(valuesMaxMin.size() - 1));
+					this.getPanelTraffic().setMinValue(minValue);
+					this.getPanelTraffic().setMaxValue(maxValue);
 					this.getPanelTraffic().setIsStreetsColored(true);
-					this.getPanelTraffic().setColorToStreets(getPanelTraffic().getGraphics(), resultXValues,valuesMaxMin.get(0),valuesMaxMin.get(valuesMaxMin.size()-1));
+					this.getPanelTraffic().setColorToStreets(getPanelTraffic().getGraphics(), resultXValues,minValue,maxValue);
 					this.getPanelTraffic().repaint();
 				}
 			}
