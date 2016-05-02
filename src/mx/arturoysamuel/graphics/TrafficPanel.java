@@ -195,15 +195,20 @@ public class TrafficPanel extends JPanel {
 			}
 		}
 	}
-	
+	public Color getColorByPower(double power)
+	{
+	    double H = power * 0.4;
+	    double S = 1.0;
+	    double B = 1.0;
+	    return Color.getHSBColor((float)H, (float)S, (float)B);
+	}
 	public void setColorToStreets(Graphics g, List<XValue> resultXValues, int minValue, int maxValue) {
 		Graphics2D g2d = (Graphics2D) g;
 		ColorStreet tempColorStreet[] = new ColorStreet[this.colorStreet.length];
 		for (int i = 0; i < this.colorStreet.length; i++) {
 			g2d.setStroke(new BasicStroke(3));
-			int redColor = resultXValues.get(i).getValue() * 255 / maxValue;
-			int greenColor = (255 * (maxValue - resultXValues.get(i).getValue()) / maxValue);
-			g2d.setColor(new Color(redColor, greenColor, 0));
+			double valuePower = 1.0 -((double)resultXValues.get(i).getValue() / (double)maxValue);
+			g2d.setColor(this.getColorByPower(valuePower));
 			tempColorStreet[i] = new ColorStreet("X" + resultXValues.get(i).getIndex(), this.colorStreet[i].getXInitial(), this.colorStreet[i].getYInitial(), this.colorStreet[i].getXLast(), this.colorStreet[i].getYLast());
 			g2d.draw(tempColorStreet[i].getColorStreet());
 		}
