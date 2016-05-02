@@ -193,7 +193,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			JTextField[] textFields = this.getPanelInputVariables().getPanelInput().getTextFieldInputs();
 			int[] inputValues = new int[textFields.length];
 			boolean inputIsValid = true;
-			/*for (int i = 0; i < textFields.length; i++) {
+			for (int i = 0; i < textFields.length; i++) {
 				try {
 				     if(Integer.parseInt(textFields[i].getText()) < 0){
 				    	inputIsValid = false;
@@ -206,18 +206,18 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			    	JOptionPane.showMessageDialog(this, "No valid value at input \"" + (char)(65 + i) + "\"");
 					break;
 				}
-			}*/
+			}
 			
 			//Temp for testing
-			Random r = new Random();
+			/*Random r = new Random();
 			for (int i = 0; i < inputValues.length; i++) {
 				inputValues[i] = r.nextInt(1000);
-			}
+			}*/
 			
 			if(inputIsValid){
 				calculateEcuationsButton.setEnabled(false);
 				for (int i = 0; i < inputValues.length; i++) {
-					//inputValues[i] = Integer.parseInt(textFields[i].getText());
+					inputValues[i] = Integer.parseInt(textFields[i].getText());
 					textFields[i].setEditable(false);
 				}
 				double[][] A = new double[this.getNumOfVariables()][this.getNumOfVariables()];
