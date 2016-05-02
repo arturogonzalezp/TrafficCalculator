@@ -16,8 +16,8 @@ import mx.arturoysamuel.calculator.FinalEcuation;
 import mx.arturoysamuel.calculator.XValue;
 
 public class VariablesFinalResultPanel extends JPanel{
-	List<JLabel> labels;
-	FinalEcuation[] finalEcuations;
+	private List<JLabel> labels;
+	private FinalEcuation[] finalEcuations; 
 	public VariablesFinalResultPanel(){
 		this.setPreferredSize(new Dimension(200, 400));
 		this.setBorder(BorderFactory.createTitledBorder("Streets values(vph) "));
@@ -28,15 +28,15 @@ public class VariablesFinalResultPanel extends JPanel{
 		this.emptyPanel();
 		this.addEcuations();
 		JLabel resultsLabel = new JLabel("Results");
-		resultsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		resultsLabel.setBorder(new EmptyBorder(50, 10, 10, 10));
+		resultsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		resultsLabel.setBorder(new EmptyBorder(20, 10, 10, 10));
 		this.getLabels().add(resultsLabel);
 		this.add(resultsLabel);
 		for (XValue xValue : xValues) {
 			JLabel tempLabel = new JLabel(xValue.drawString() + " = " + xValue.getValue());
-			tempLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			tempLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			this.getLabels().add(tempLabel);
-			this.add(tempLabel, Component.CENTER_ALIGNMENT);
+			this.add(tempLabel, Component.LEFT_ALIGNMENT);
 		}
 		this.revalidate();
 		this.repaint();
@@ -56,13 +56,13 @@ public class VariablesFinalResultPanel extends JPanel{
 	}
 	public void addEcuations(){
 		this.getLabels().add(new JLabel("Ecuations"));
-		this.getLabels().get(0).setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.getLabels().get(0).setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.getLabels().get(0).setBorder(new EmptyBorder(10, 10, 10, 10));
-		this.add(this.getLabels().get(0), Component.CENTER_ALIGNMENT);
+		this.add(this.getLabels().get(0), Component.LEFT_ALIGNMENT);
 		for (int i = 1; i <= this.getFinalEcuations().length; i++) {
 			this.getLabels().add(new JLabel("X" + i + " = " + this.getFinalEcuations()[(i-1)].toString()));
-			this.getLabels().get(i).setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(this.getLabels().get(i), Component.CENTER_ALIGNMENT);
+			this.getLabels().get(i).setAlignmentX(Component.LEFT_ALIGNMENT);
+			this.add(this.getLabels().get(i), Component.LEFT_ALIGNMENT);
 		}
 		this.revalidate();
 		this.repaint();

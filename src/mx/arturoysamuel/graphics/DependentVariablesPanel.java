@@ -2,7 +2,9 @@ package mx.arturoysamuel.graphics;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class DependentVariablesPanel extends JPanel{
 	private VariablesFinalResultPanel panelVariablesFinalResult;

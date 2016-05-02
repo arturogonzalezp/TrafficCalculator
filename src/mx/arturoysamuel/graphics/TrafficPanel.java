@@ -133,7 +133,6 @@ public class TrafficPanel extends JPanel {
 			
 			if (i % 2 == 0) {
 				this.roadLine[i] = new RoadLine(1, isPositiveStreet, xVar * j, Y_INIT, xVar * j, Y_LAST);
-				System.out.println("XInit: " + this.roadLine[i].getXInit() + "\nYInit: " + this.roadLine[i].getYInit() + "\nXLast: " + this.roadLine[i].getXLast() + "\nYLast: " + this.roadLine[i].getYLast() + "\n");
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + j)));
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + jumpValue * 3 - j + addValue + addValue2)));
 				for (int k = 0; k < oddNumberOfStreets + addValue2; k++) {
@@ -151,7 +150,6 @@ public class TrafficPanel extends JPanel {
 			}
 			else {
 				this.roadLine[i] = new RoadLine(0,isPositiveStreet, X_INIT, yVar * j, X_LAST, yVar * j);
-				System.out.println("XInit: " + this.roadLine[i].getXInit() + "\nYInit: " + this.roadLine[i].getYInit() + "\nXLast: " + this.roadLine[i].getXLast() + "\nYLast: " + this.roadLine[i].getYLast() + "\n");
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + j + jumpValue)));
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + jumpValue * 4 - j + addValue)));
 				j++;
