@@ -435,11 +435,12 @@ public class TrafficFrame extends JFrame implements ActionListener{
 							A[nodeNum][northNodePos] = 1;
 							b[nodeNum] = inputValues[independentValuePos];
 							
-						} if(column == 0){
+						}else if(column == 0){
 							// Lado izquierdo (no incluye a las esquinas)
 							int eastNodePos = ((2*row)*(this.getDirectionsV().length-1)) + row;
 							int northNodePos = eastNodePos - this.getDirectionsV().length;
-							int southNodePos = eastNodePos + northNodePos;
+							int southNodePos = eastNodePos + (this.getDirectionsV().length - 1);
+							
 							if(this.getDirectionsV()[column]){	
 								if(this.getDirectionsH()[row]){
 									
@@ -473,7 +474,6 @@ public class TrafficFrame extends JFrame implements ActionListener{
 							int northNodePos = ((2*row)*(this.getDirectionsV().length - 1)) + (row - 1);
 							int westNodePos = northNodePos + this.getDirectionsV().length - 1;
 							int southNodePos = westNodePos + this.getDirectionsV().length;
-							System.out.println("West: " + westNodePos + "\nNorth: " + northNodePos + "\nSouth: " + southNodePos + "\n");
 							if(this.getDirectionsV()[column]){	
 								if(this.getDirectionsH()[row]){
 									
