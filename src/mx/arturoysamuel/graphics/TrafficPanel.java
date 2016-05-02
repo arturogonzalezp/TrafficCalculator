@@ -1,23 +1,32 @@
 package mx.arturoysamuel.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
+import java.time.chrono.MinguoChronology;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.xml.ws.WebEndpoint;
+
+import mx.arturoysamuel.calculator.XValue;
 
 public class TrafficPanel extends JPanel {
 
+	
 	private int streetsCount;
 	private RoadLine[] roadLine;
 	private ColorStreet[] colorStreet;
 	private int[] xCoordinates;
 	private int[] yCoordinates;
+	private int maxValue;
+	private int minValue;
+	private List<XValue> xValue;
+	
+	private boolean isStreetColored = false;
 	
 	private static final int X_INIT = 50;
 	private static final int X_LAST = 450;
@@ -33,7 +42,39 @@ public class TrafficPanel extends JPanel {
 	public int getStreetsCount() {
 		return this.streetsCount;
 	}
-
+	
+	public void setXValue(List<XValue> xValue) {
+		this.xValue = xValue;
+	}
+	
+	public List<XValue> getXValue() {
+		return this.xValue;
+	}
+	
+	public void setMinValue(int minValue) {
+		this.minValue = minValue;
+	}
+	
+	public int getMinValue() {
+		return this.minValue;
+	}
+	
+	public void setMaxValue(int maxValue) {
+		this.maxValue = maxValue;
+	}
+	
+	public int getMaxValue() {
+		return this.maxValue;
+	}
+	
+	public void setIsStreetsColored(boolean isStreetsColored) {
+		this.isStreetColored = isStreetsColored;
+	}
+	
+	private boolean getIsStreetsColored() {
+		return this.isStreetColored;
+	}
+	
 	public void paintLines(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
@@ -100,7 +141,6 @@ public class TrafficPanel extends JPanel {
 		}	
 	}
 
-	
 	public void paintVariables(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		int xIndex = 0;
@@ -157,9 +197,25 @@ public class TrafficPanel extends JPanel {
 		}
 	}
 	
+	public void setColorToStreets(Graphics g, List<XValue> resultXValues, int minValue, int maxValue) {
+		Graphics2D g2d = (Graphics2D) g;
+		ColorStreet tempColorStreet[] = new ColorStreet[this.colorStreet.length];
+		for (int i = 0; i < this.colorStreet.length; i++) {
+			g2d.setStroke(new BasicStroke(3));
+			int redColor = resultXValues.get(i).getValue() * 255 / maxValue;
+			int greenColor = (255 * (maxValue - resultXValues.get(i).getValue()) / maxValue);
+			g2d.setColor(new Color(redColor, greenColor, 0));
+			tempColorStreet[i] = new ColorStreet("X" + resultXValues.get(i).getIndex(), this.colorStreet[i].getXInitial(), this.colorStreet[i].getYInitial(), this.colorStreet[i].getXLast(), this.colorStreet[i].getYLast());
+			g2d.draw(tempColorStreet[i].getColorStreet());
+		}
+	}
+	
 	public void paint(Graphics g) {
 		super.paint(g);
 		paintLines(g);
 		paintVariables(g);
+		if (this.isStreetColored) {	
+			setColorToStreets(g, getXValue(), getMinValue(), getMaxValue());
+		}
 	}
 }

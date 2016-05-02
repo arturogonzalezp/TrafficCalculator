@@ -64,7 +64,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 		for (int i = 0; i < this.getDirectionsH().length; i++) {
 			opc = JOptionPane.showOptionDialog(
 					this,
-					"The direction of the " + (i + 1) + "° horizontal street:",
+					"The direction of the " + (i + 1) + "ï¿½ horizontal street:",
 					"Direction Input",
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE,
@@ -82,7 +82,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 		for (int i = 0; i < this.getDirectionsV().length; i++) {
 			opc = JOptionPane.showOptionDialog(
 					this,
-					"The direction of the " + (i + 1) + "° vertical street:",
+					"The direction of the " + (i + 1) + "ï¿½ vertical street:",
 					"Direction Input",
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE,
@@ -656,7 +656,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 				for (int i = 0; i < this.getFinalEcuations().length; i++) {
 					if(this.getFinalEcuations()[i].solveWithParameters(dependentVariables) < 0){
 						secondInputIsValid = false;
-						JOptionPane.showMessageDialog(this, "The dependent variables cannot have those values, traffic can´t be negative");
+						JOptionPane.showMessageDialog(this, "The dependent variables cannot have those values, traffic canï¿½t be negative");
 						break;
 					}
 				}
@@ -674,7 +674,12 @@ public class TrafficFrame extends JFrame implements ActionListener{
 					Collections.sort(valuesMaxMin);
 					System.out.println("\nMin: " + valuesMaxMin.get(0) + "\nMax: " + valuesMaxMin.get(valuesMaxMin.size()-1));
 					this.getPanelDependentVariables().getPanelVariablesFinalResult().printResults(resultXValues);
-					//this.getPanelTraffic().setColorToStreets(resultValues,valuesMaxMin.get(0),valuesMaxMin.get(valuesMaxMin.size()-1));
+					this.getPanelTraffic().setXValue(resultXValues);
+					this.getPanelTraffic().setMinValue(valuesMaxMin.get(0));
+					this.getPanelTraffic().setMaxValue(valuesMaxMin.get(valuesMaxMin.size() - 1));
+					this.getPanelTraffic().setIsStreetsColored(true);
+					this.getPanelTraffic().setColorToStreets(getPanelTraffic().getGraphics(), resultXValues,valuesMaxMin.get(0),valuesMaxMin.get(valuesMaxMin.size()-1));
+					this.getPanelTraffic().repaint();
 				}
 			}
 		}else{
