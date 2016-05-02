@@ -23,7 +23,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 	private TrafficPanel panelTraffic;
 	private InputVariablesPanel panelInputVariables;
 	private DependentVariablesPanel panelDependentVariables;
-	private final int maxNumberOfStreets = 10;
+	private final int maxNumberOfStreets = 8;
 	private final int minNumberOfStreets = 4;
 	private int streetsCount;
 	private int numOfVariables;
@@ -98,7 +98,7 @@ public class TrafficFrame extends JFrame implements ActionListener{
 			}
 		}
 		this.setDependentVariables(new ArrayList<DependentVariable>());
-		this.setPanelTraffic(new TrafficPanel(streetsCount));
+		this.setPanelTraffic(new TrafficPanel(streetsCount,this.getDirectionsV(),this.getDirectionsH()));
 		this.setPanelInputVariables(new InputVariablesPanel(streetsCount));
 		this.setPanelDependentVariables(new DependentVariablesPanel());
 		this.add(this.getPanelTraffic(), BorderLayout.WEST);

@@ -24,6 +24,7 @@ public class TrafficPanel extends JPanel {
 	private int maxValue;
 	private int minValue;
 	private List<XValue> xValue;
+	private boolean[] directionsH, directionsV;
 	
 	private boolean isStreetColored = false;
 	
@@ -32,8 +33,10 @@ public class TrafficPanel extends JPanel {
 	private static final int Y_INIT = 50;
 	private static final int Y_LAST = 450;
 
-	public TrafficPanel(int streetsCount) {
+	public TrafficPanel(int streetsCount, boolean[] directionsV, boolean[] directionsH) {
 		this.streetsCount = streetsCount;
+		this.directionsV = directionsV;
+		this.directionsH = directionsH;
 		this.setPreferredSize(new Dimension(500, 500));
 		this.setBorder(BorderFactory.createTitledBorder("Traffic Calculator"));
 	}
@@ -112,9 +115,25 @@ public class TrafficPanel extends JPanel {
 			this.xCoordinates = new int[(int) (Math.ceil((double) this.roadLine.length / (double) 2)) * oddNumberOfStreets];
 			this.yCoordinates = new int[(int) (Math.ceil((double) this.roadLine.length / (double) 2)) * oddNumberOfStreets];
 		}
+		int vCounter = 0;
+		int hCounter = 0;
+		boolean stepper = true;
+		boolean isPositiveStreet;
 		for (int i = 0; i < this.roadLine.length; i++) {
+			System.out.println("i: " + i + "\n");
+			if(stepper){
+				isPositiveStreet = this.directionsV[vCounter];
+				vCounter++;
+				stepper = false;
+			}else{
+				isPositiveStreet = this.directionsH[hCounter];
+				hCounter++;
+				stepper = true;
+			}
+			
 			if (i % 2 == 0) {
-				this.roadLine[i] = new RoadLine(0, xVar * j, Y_INIT, xVar * j, Y_LAST);
+				this.roadLine[i] = new RoadLine(1, isPositiveStreet, xVar * j, Y_INIT, xVar * j, Y_LAST);
+				System.out.println("XInit: " + this.roadLine[i].getXInit() + "\nYInit: " + this.roadLine[i].getYInit() + "\nXLast: " + this.roadLine[i].getXLast() + "\nYLast: " + this.roadLine[i].getYLast() + "\n");
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + j)));
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + jumpValue * 3 - j + addValue + addValue2)));
 				for (int k = 0; k < oddNumberOfStreets + addValue2; k++) {
@@ -131,11 +150,14 @@ public class TrafficPanel extends JPanel {
 				}
 			}
 			else {
-				this.roadLine[i] = new RoadLine(0, X_INIT, yVar * j, X_LAST, yVar * j);
+				this.roadLine[i] = new RoadLine(0,isPositiveStreet, X_INIT, yVar * j, X_LAST, yVar * j);
+				System.out.println("XInit: " + this.roadLine[i].getXInit() + "\nYInit: " + this.roadLine[i].getYInit() + "\nXLast: " + this.roadLine[i].getXLast() + "\nYLast: " + this.roadLine[i].getYLast() + "\n");
 				this.roadLine[i].paintFinalString(g2d, Character.toString((char) (64 + j + jumpValue)));
 				this.roadLine[i].paintInitString(g2d, Character.toString((char) (64 + jumpValue * 4 - j + addValue)));
 				j++;
 			}
+			this.roadLine[i].paintInitArrow(g2d);
+			this.roadLine[i].paintFinalArrow(g2d);
 			g2d.draw(this.roadLine[i].getRoadLine());
 		}	
 	}
